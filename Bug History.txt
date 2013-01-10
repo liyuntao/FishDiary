@@ -1,0 +1,144 @@
+﻿Critical Bug History:
+
+1. NPE problems. (Monkey Test)
+Bug描述：开启USB存储模式，选择头像等操作，因外部存储读取失败导致空指针异常
+
+src/com/flounder/fishDiary/FishSettingsActivity.java
+@@ -146,7 +147,9 @@ public class FishSettingsActivity extends PreferenceActivity {
+             return;
+ 
+         if (requestCode == REQUEST_PICK_HEAD) {
+-            mImagePref.setImageUri(ImageUtil.getImageUri(HEAD_FILENAME));
++            Uri uri = ImageUtil.getImageUri(HEAD_FILENAME);
++            if (uri != null)
++                mImagePref.setImageUri(uri);
+         }
+		
+src/com/flounder/fishDiary/image/ImageUtil.java
+     public static Intent getPhotoPickIntent(int iconSize, String fileName) {
+-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
+-        intent.setType("image/*");
+-        intent.putExtra("crop", "true");
+-        intent.putExtra("aspectX", 1);
+-        intent.putExtra("aspectY", 1);
+-        intent.putExtra("outputX", iconSize);
+-        intent.putExtra("outputY", iconSize);
+-        intent.putExtra(MediaStore.EXTRA_OUTPUT, getImageUri(fileName));
+-        intent.putExtra("scale", true);
+-        intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
+-        intent.putExtra("return-data", false);
+-        return intent;
++        Uri uri = getImageUri(fileName);
++        if (uri != null) {  // Fix NPE problems.
++            Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null);
++            intent.setType("image/*");
++            intent.putExtra("crop", "true");
++            intent.putExtra("aspectX", 1);
++            intent.putExtra("aspectY", 1);
++            intent.putExtra("outputX", iconSize);
++            intent.putExtra("outputY", iconSize);
++            intent.putExtra(MediaStore.EXTRA_OUTPUT, getImageUri(fileName));
++            intent.putExtra("scale", true);
++            intent.putExtra("outputFormat", Bitmap.CompressFormat.JPEG.toString());
++            intent.putExtra("return-data", false);
++            return intent;
++        }
++        return null;
+     }
+ 
+     /** Launches Gallery to pick a photo. */
+@@ -95,15 +99,22 @@ public class ImageUtil {
+         try {
+             // Launch picker to choose photo for selected contact
+             final Intent intent = getPhotoPickIntent(iconSize, fileName);
+-            activity.startActivityForResult(Intent.createChooser(intent,
+-                    activity.getString(R.string.intent_chooser_image)), requestCode);
++            if (intent != null) // Fix NPE problems.
++                activity.startActivityForResult(
++                        Intent.createChooser(intent,
++                                activity.getString(R.string.intent_chooser_image)),
++                        requestCode);
+         } catch (ActivityNotFoundException e) {
+             e.printStackTrace();
+         }
+     }
+ 
+     public static Uri getImageUri(String fileName) {
+-        return Uri.fromFile(getImageFile(fileName));
++        File f = getImageFile(fileName);
++        if (f != null) {    // Fix NPE problems.
++            return Uri.fromFile(f);
++        }
++        return null;
+     }
+	 
+2. NPE problems. 
+Bug描述：当不存在标签时，在标签对话框点击“确定”导致异常退出
+
+src/com/flounder/fishDiary/FishStoryListActivity.java
+
+@@ -400,6 +390,9 @@ public class FishStoryListActivity extends ListActivity {
+         builder.setPositiveButton(R.string.button_ok, new OnClickListener() {
+             @Override
+             public void onClick(DialogInterface dialog, int which) {
++                if (mTagItems == null)  // Fix NPE problems
++                    return;
++
+                 StringBuilder strBuilder = new StringBuilder();
+                 for (int i = 0; i < mTagItems.length; i++) {
+                     if (selectedIndexSet.contains(i))
+@@ -414,6 +407,7 @@ public class FishStoryListActivity extends ListActivity {
+                 @Override
+                 public void onClick(DialogInterface dialog, int which) {
+                     StringBuilder strBuilder = new StringBuilder();
++                    // mTagItems can't be null here, needless do the null check
+                     for (int i = 0; i < mTagItems.length; i++) {
+                         if (selectedIndexSet.contains(i)) {
+                             String str = mTagItems[i] + Constants.TAG_SEPERATOR;
+							 
+							 
+3. 导出文本时文件覆盖
+Bug描述：当存在同名记录时，导出文本会覆盖已导出文件
+
+src/com/flounder/fishDiary/util/FileUtils.java
+
+@@ -56,8 +56,16 @@ public class FileUtils {
+         if (getRootFolder() == null)
+             return false;
+ 
++        // avoid overwritten when exporting notes with same name [fix]
++        int _num = 0;
+         File dstFile = new File(getRootFolder() + File.separator + folderName,
+                 fileName + Constants.TEXT_EXTENSTION);
++        while (dstFile.exists()) {
++            _num++;
++            dstFile = new File(getRootFolder() + File.separator + folderName,
++                    fileName + "(" + _num + ")" + Constants.TEXT_EXTENSTION);
++        }
++
+         try {
+             OutputStreamWriter osw = new OutputStreamWriter(
+                     new FileOutputStream(dstFile), "gbk");
+					 
+					 
+4. 恢复默认设置时，标签信息会被清空. (Defect at design)
+Bug描述：由于添加标签的复选框需获取当前所有Tag，因此将Tag列表作为一个String保存在SharedPref中，恢复默认设置时会被清空。
+
+src/com/flounder/fishDiary/FishSettingsActivity.java
+
+public class FishSettingsActivity extends PreferenceActivity {
+ 
+     /** Restore everything */
+     private void restoreSettings() {
++        String tagStr = FishPreferences.getNoteTag(mContext);
++        boolean firstTime = FishPreferences.isFirstTime(mContext);
++
+         SharedPreferences.Editor editor = FishPreferences.getEditor(mContext);
+         editor.clear();
+         editor.apply();
++
++        editor.putString(FishPreferences.KEY_NOTE_TAG, tagStr); // keep note tag [fix]
++        editor.putBoolean(FishPreferences.KEY_FIRST_TIME, firstTime); // keep firstTime
++        editor.commit();
+         refreshPrefs();
+     }

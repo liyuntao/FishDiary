@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/options_menu_insert"
+        android:title="@string/button_add"/>
+    <item
+        android:id="@+id/options_menu_export"
+        android:title="@string/menu_export"/>
+    <item
+        android:id="@+id/options_menu_settings"
+        android:title="@string/menu_settings"/>
+    <item
+        android:id="@+id/options_menu_quit"
+        android:title="@string/menu_quit"/>
+
+</menu>

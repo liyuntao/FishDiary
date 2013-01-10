@@ -1,0 +1,10 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/options_menu_night_mode"
+        android:title="@string/menu_night_mode"/>
+    <item
+        android:id="@+id/options_menu_full_screen"
+        android:title="@string/menu_full_screen"/>
+
+</menu>

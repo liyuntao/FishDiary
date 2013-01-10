@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceCategory
+        android:key="@string/pref_category_myNote_key"
+        android:title="@string/pref_category_myNote" >
+        <com.flounder.fishDiary.view.ImageViewPreference
+            android:key="@string/pref_image_key"
+            android:title="@string/pref_image"
+            android:widgetLayout="@layout/pref_account_image" />
+
+        <Preference
+            android:key="@string/pref_author_key"
+            android:summary="@string/pref_author_summary"
+            android:title="@string/pref_author" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="@string/pref_category_text_key"
+        android:title="@string/pref_category_text" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:key="@string/pref_underline_enable_key"
+            android:title="@string/pref_underline_enable" />
+
+        <com.flounder.fishDiary.view.SeekbarPreference
+            android:dialogLayout="@layout/setting_textsize_seekbar"
+            android:key="@string/pref_text_size_key"
+            android:title="@string/pref_text_size" />
+
+        <Preference
+            android:key="@string/pref_background_key"
+            android:title="@string/pref_background" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="@string/pref_category_general_key"
+        android:title="@string/pref_category_general" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="@string/pref_passwd_key"
+            android:summary="@string/pref_passwd_summary"
+            android:title="@string/pref_passwd" />
+
+        <Preference
+            android:key="@string/pref_about_key"
+            android:summary="@string/pref_about_summary"
+            android:title="@string/pref_about" />
+        <Preference
+            android:key="@string/pref_restore_key"
+            android:title="@string/pref_restore" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
