@@ -23,24 +23,24 @@ public class Constants {
 
     public static final int CONTENT_READING = 2010;
 
-    public static final String ABOUT_TITLE = "¹ØÓÚFishDiary";
+    public static final String ABOUT_TITLE = "å…³äºFishDiary";
 
-    public static final String ABOUT_TEXT_1 = "FishDiary is my Android & Java practice...\nÈç¹ûÏ£ÍûµÃµ½Ô´Âë£¬Çë·ÃÎÊ£º\n";
+    public static final String ABOUT_TEXT_1 = "FishDiary is my Android & Java practice...\nå¦‚æœå¸Œæœ›å¾—åˆ°æºç ï¼Œè¯·è®¿é—®ï¼š\n";
 
     public static final String ABOUT_TEXT_2 = "https://github.com/alex-yh99";
 
-    public static final String ABOUT_TEXT_3 = "\n\n\n- È±Ïİ·´À¡¡¢Òâ¼û¼°½¨ÒéµÈ\n»¶Ó­ÖÂĞÅ£º\n";
+    public static final String ABOUT_TEXT_3 = "\n\n\n- ç¼ºé™·åé¦ˆã€æ„è§åŠå»ºè®®ç­‰\næ¬¢è¿è‡´ä¿¡ï¼š\n";
 
     public static final String ABOUT_TEXT_4 = "wangyaohuicn@gmail.com";
 
-    public static final String ABOUT_TEXT_5 = "\n\n\n- P.S. ÍÆ¼öÔÄ¶Á£º";
+    public static final String ABOUT_TEXT_5 = "\n\n\n- P.S. æ¨èé˜…è¯»ï¼š";
 
     public static final String ABOUT_TEXT_6 = "Le Petit Prince";
 
     public static final String ABOUT_TEXT = ABOUT_TEXT_1 + ABOUT_TEXT_2
             + ABOUT_TEXT_3 + ABOUT_TEXT_4 + ABOUT_TEXT_5 + ABOUT_TEXT_6;
 
-    public static final String MAIL_SUBJECT = "FishDiaryÒâ¼û·´À¡";
+    public static final String MAIL_SUBJECT = "FishDiaryæ„è§åé¦ˆ";
 
-    public static final String MAIL_CONTENT = "FishDiary·´À¡ÄÚÈİ£º";
+    public static final String MAIL_CONTENT = "FishDiaryåé¦ˆå†…å®¹ï¼š";
 }

@@ -21,6 +21,7 @@
     <string name="button_edit">Edit</string>
     <string name="button_delete">Delete</string>
     <string name="button_save">Save</string>
+	<string name="button_setting">Setting</string>
     <string name="et_title_hint">Please input title</string>
     <string name="hint_encrypted">*** Encrypted ***</string>
     <string name="hint_note_saved">Note has been saved successfully.</string>

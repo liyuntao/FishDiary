@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.AsyncQueryHandler;
@@ -60,6 +61,7 @@ import com.flounder.fishDiary.view.PasswordDialog.IPasswdCallBack;
 public class FishStoryListActivity extends ListActivity {
 
     private Button mBtnAdd;
+    private Button mBtnSetting;
     private ImageView mImage;
 
     private MyCursorAdapter mAdapter;
@@ -140,6 +142,13 @@ public class FishStoryListActivity extends ListActivity {
                 insertNote();
             }
         });
+        mBtnSetting = (Button) findViewById(R.id.btn_setting);
+        mBtnSetting.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				FishStoryListActivity.this.openOptionsMenu();
+			}
+		});
 
         /* Sets the callback for context menu activation for the ListView */
         getListView().setOnCreateContextMenuListener(this);
