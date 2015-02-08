@@ -66,15 +66,16 @@ public class FileUtils {
                     fileName + "(" + _num + ")" + Constants.TEXT_EXTENSTION);
         }
 
+        BufferedWriter bw = null;
         try {
-            OutputStreamWriter osw = new OutputStreamWriter(
-                    new FileOutputStream(dstFile), "gbk");
-            BufferedWriter bw = new BufferedWriter(osw);
+            bw = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream(dstFile), "gbk"));
             bw.write(text);
-            bw.close();
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            IOUtils.closeQuietly(bw);
         }
         return true;
     }
@@ -82,7 +83,7 @@ public class FileUtils {
     public static String readFileToString(String fileName) {
         String line = null;
         String text = "";
-        BufferedReader reader = null;
+        BufferedReader reader;
         try {
             BufferedInputStream bis = new BufferedInputStream(new FileInputStream(
                     fileName));
@@ -134,6 +135,8 @@ public class FileUtils {
             }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            IOUtils.closeQuietly(reader);
         }
         return text;
     }
